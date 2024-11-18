@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nginx
+  labels:
+    app: nginx
+    app.kubernetes.io/name: nginx-server
+    app.kubernetes.io/instance: nginx-server
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: nginx
+      app.kubernetes.io/name: nginx-server
+      app.kubernetes.io/instance: nginx-server
+  template:
+    metadata:
+      labels:
+        app: nginx
+        app.kubernetes.io/name: nginx-server
+        app.kubernetes.io/instance: nginx-server
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:latest
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: web-content
+              mountPath: /usr/share/nginx/html
+      volumes:
+        - name: web-content
+          configMap:
+            name: {{ .Release.Name }}-web-content

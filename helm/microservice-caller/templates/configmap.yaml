@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-script
+data:
+  call-nginx.sh: |
+    #!/bin/bash
+    while true; do
+      curl http://nginx-server-nginx.default.svc.cluster.local
+      sleep 5
+    done
